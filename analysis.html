@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="SENTINEL Retail Intelligence — management analysis from automated PSS retail reporting outputs." />
+  <meta name="theme-color" content="#0000ff" />
+  <title>SENTINEL Retail Intelligence</title>
+
+  <!-- Flat blue-square T favicon -->
+  <link
+    rel="icon"
+    type="image/svg+xml"
+    href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" fill="%230000ff"/><rect x="15" y="14" width="34" height="8" fill="white"/><rect x="28" y="22" width="8" height="28" fill="white"/></svg>'
+  />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="analysis.css?v=20260908-utilities-v1" />
+  <script defer src="analysis.js?v=20260908-utilities-v1"></script>
+</head>
+
+<body>
+  <main class="page" id="analysisTop">
+
+    <!-- Masthead -->
+    <header class="masthead">
+      <div class="brand">
+        <img
+          src="https://cdn.prod.website-files.com/6719e3902a71ea8154ba371d/6996a2c470a01e3f32ffa080_M30.png"
+          alt="MRANTI 30 Years"
+        />
+        <div class="brand-meta">
+          SENTINEL · RETAIL INTELLIGENCE<br />
+          AUTOMATED STATION PERFORMANCE REVIEW
+        </div>
+      </div>
+
+      <div class="mast-actions">
+        <div class="period">
+          <label for="periodSelect">Reporting period</label>
+          <select id="periodSelect" aria-label="Reporting period"></select>
+        </div>
+
+        <div class="mast-links">
+          <a href="./">← Automation Control Centre</a>
+          <a id="sourceFolderLink" target="_blank" rel="noreferrer">Source files ↗</a>
+        </div>
+      </div>
+    </header>
+
+    <div class="rule"></div>
+
+    <!-- Hero -->
+    <section class="hero" id="overview">
+      <div>
+        <div class="eyebrow">SENTINEL RETAIL INTELLIGENCE · AUTOMATED DAILY REPORTING</div>
+        <h1 id="heroTitle">Loading retail intelligence…</h1>
+        <div class="hero-summary" id="heroSummary"></div>
+        <div class="hero-meta" id="heroMeta"></div>
+      </div>
+
+      <div class="hero-side" id="heroSide"></div>
+    </section>
+
+    <div class="rule"></div>
+
+    <!-- Concentration statement -->
+    <section class="big" id="focusSection">
+      <div>
+        <div class="eyebrow">WHERE RETAIL ACTIVITY IS CONCENTRATED</div>
+        <div class="number" id="focusNumber">—</div>
+        <div class="label" id="focusLabel">OF RECORDED RETAIL VALUE</div>
+        <div class="note" id="focusNote"></div>
+      </div>
+      <div class="insight" id="focusInsight"></div>
+    </section>
+
+    <div class="rule"></div>
+
+    <!-- Chapter 1 -->
+    <section class="chapter" id="snapshot">
+      <div class="chapter-head">
+        <div class="eyebrow">01 · OPERATING SNAPSHOT</div>
+        <h2 class="chapter-title" id="snapshotTitle">The retail picture at a glance.</h2>
+        <p class="chapter-sub">
+          Recorded station throughput, sales composition and finance-control signals calculated from SENTINEL's automated daily outputs.
+        </p>
+      </div>
+
+      <div class="signals" id="signals"></div>
+    </section>
+
+    <div class="rule"></div>
+
+    <!-- Chapter 2 -->
+    <section class="chapter" id="trend">
+      <div class="chapter-head">
+        <div class="eyebrow">02 · SALES MOMENTUM</div>
+        <h2 class="chapter-title" id="trendTitle">Daily movement shows the shape behind the monthly total.</h2>
+        <p class="chapter-sub">
+          Recorded retail value by station-day. September is month-to-date through the latest automated record.
+        </p>
+      </div>
+
+      <div class="split">
+        <div class="figure blue">
+          <div class="fig-title">Daily recorded retail value · PSS 1 vs PSS 2</div>
+          <div class="line-chart" id="dailyTrendChart"></div>
+          <div class="fig-caption" id="dailyTrendCaption"></div>
+        </div>
+
+        <div class="copy" id="trendCopy"></div>
+      </div>
+    </section>
+
+    <div class="rule"></div>
+
+    <!-- Chapter 3 -->
+    <section class="chapter" id="stations">
+      <div class="chapter-head">
+        <div class="eyebrow">03 · STATION PERFORMANCE</div>
+        <h2 class="chapter-title" id="stationTitle">The station gap is persistent across the reporting period.</h2>
+        <p class="chapter-sub">
+          Monthly recorded retail value and average station-day throughput for PSS 1 and PSS 2.
+        </p>
+      </div>
+
+      <div class="split reverse">
+        <div class="copy" id="stationCopy"></div>
+
+        <div class="figure">
+          <div class="fig-title">Monthly recorded retail value by station</div>
+          <div class="bar-chart" id="stationChart"></div>
+          <div class="fig-caption" id="stationCaption"></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="rule"></div>
+
+    <!-- Chapter 4 -->
+    <section class="chapter" id="mix">
+      <div class="chapter-head">
+        <div class="eyebrow">04 · PRODUCT MIX</div>
+        <h2 class="chapter-title" id="mixTitle">Primax95 carries most of the recorded fuel value.</h2>
+        <p class="chapter-sub">
+          Fuel-product contribution derived from the daily CASH and CREDIT station reports.
+        </p>
+      </div>
+
+      <div class="split">
+        <div class="figure cyan">
+          <div class="fig-title">Fuel value contribution</div>
+          <div class="hbar-chart" id="fuelMixChart"></div>
+          <div class="fig-caption" id="fuelMixCaption"></div>
+        </div>
+
+        <div class="copy" id="mixCopy"></div>
+      </div>
+    </section>
+
+    <div class="rule"></div>
+
+    <!-- Chapter 5 -->
+    <section class="chapter" id="payments">
+      <div class="chapter-head">
+        <div class="eyebrow">05 · PAYMENT BEHAVIOUR</div>
+        <h2 class="chapter-title" id="paymentTitle">Digital and card channels dominate the credit-side mix.</h2>
+        <p class="chapter-sub">
+          Payment-channel values captured from the automated CREDIT (Z2) station reports.
+        </p>
+      </div>
+
+      <div class="split reverse">
+        <div class="copy" id="paymentCopy"></div>
+
+        <div class="figure blue">
+          <div class="fig-title">Largest recorded payment channels</div>
+          <div class="hbar-chart" id="paymentChart"></div>
+          <div class="fig-caption" id="paymentCaption"></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="rule"></div>
+
+    <!-- Chapter 6 -->
+    <section class="chapter" id="controls">
+      <div class="chapter-head">
+        <div class="eyebrow">06 · FINANCE CONTROL</div>
+        <h2 class="chapter-title" id="controlTitle">The automated Cost of Sales output closes cleanly.</h2>
+        <p class="chapter-sub">
+          Debit / credit reconciliation and Cost of Sales posting values from SENTINEL's automated finance outputs.
+        </p>
+      </div>
+
+      <div class="split">
+        <div class="figure">
+          <div class="fig-title">Monthly Cost of Sales postings by station</div>
+          <div class="bar-chart" id="controlChart"></div>
+          <div class="fig-caption" id="controlCaption"></div>
+        </div>
+
+        <div class="copy" id="controlCopy"></div>
+      </div>
+
+      <div class="control-strip" id="controlStrip"></div>
+    </section>
+
+    <!-- Management readout -->
+    <section class="readout" id="managementReadout">
+      <div class="eyebrow">MANAGEMENT READOUT</div>
+      <h2 id="readoutTitle">What the automated data is telling us.</h2>
+
+      <div class="readout-grid">
+        <div class="quote" id="readoutQuote"></div>
+        <div class="readout-copy" id="readoutCopy"></div>
+      </div>
+
+      <div class="actions" id="readoutActions"></div>
+    </section>
+
+    <footer class="footer">
+      <span><strong>SENTINEL</strong> · Retail Intelligence</span>
+      <span id="footerBasis">Automated retail + Cost of Sales analysis</span>
+    </footer>
+
+  </main>
+
+  <div class="error-screen" id="errorScreen" hidden>
+    <h1>SENTINEL</h1>
+    <p>The Retail Intelligence page could not initialise.</p>
+    <pre id="errorMessage"></pre>
+  </div>
+</body>
+</html>

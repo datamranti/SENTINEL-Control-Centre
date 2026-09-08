@@ -4,100 +4,191 @@ const state = {
   auditPageSize: 18
 };
 
-const $ = (sel) => document.querySelector(sel);
+
+const $ = (selector) =>
+  document.querySelector(selector);
+
 
 
 /* =========================================================
    HELPERS
 ========================================================= */
 
-function money(v) {
-  return new Intl.NumberFormat("en-MY", {
-    style: "currency",
-    currency: "MYR",
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  })
-    .format(v)
+
+function money(value) {
+
+  return new Intl.NumberFormat(
+    "en-MY",
+    {
+      style: "currency",
+      currency: "MYR",
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }
+  )
+    .format(value)
     .replace("MYR", "RM");
 }
 
 
-function dateLabel(iso, withTime = false) {
-  const d = new Date(iso);
 
-  const opt = withTime
-    ? {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: true,
-        timeZone: "Asia/Kuala_Lumpur"
-      }
-    : {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-        timeZone: "Asia/Kuala_Lumpur"
-      };
+function dateLabel(
+  iso,
+  withTime = false
+) {
 
-  return new Intl.DateTimeFormat("en-GB", opt)
-    .format(d)
+  const date =
+    new Date(iso);
+
+
+  const options =
+    withTime
+      ? {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: true,
+          timeZone: "Asia/Kuala_Lumpur"
+        }
+      : {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+          timeZone: "Asia/Kuala_Lumpur"
+        };
+
+
+  return new Intl.DateTimeFormat(
+    "en-GB",
+    options
+  )
+    .format(date)
     .replace(",", "");
 }
 
 
+
 function dateOnlyLabel(iso) {
-  const d = new Date(`${iso}T00:00:00+08:00`);
 
-  return new Intl.DateTimeFormat("en-GB", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-    timeZone: "Asia/Kuala_Lumpur"
-  }).format(d);
+  const date =
+    new Date(
+      `${iso}T00:00:00+08:00`
+    );
+
+
+  return new Intl.DateTimeFormat(
+    "en-GB",
+    {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      timeZone: "Asia/Kuala_Lumpur"
+    }
+  ).format(date);
 }
 
 
-function daysInclusive(start, end) {
-  const a = new Date(`${start}T00:00:00+08:00`);
-  const b = new Date(`${end}T00:00:00+08:00`);
 
-  return Math.round((b - a) / 86400000) + 1;
+function daysInclusive(
+  start,
+  end
+) {
+
+  const first =
+    new Date(
+      `${start}T00:00:00+08:00`
+    );
+
+
+  const last =
+    new Date(
+      `${end}T00:00:00+08:00`
+    );
+
+
+  return (
+    Math.round(
+      (last - first) /
+      86400000
+    ) + 1
+  );
 }
+
 
 
 function monthLabel(key) {
-  const m = state.data.months.find((x) => x.key === key);
 
-  return m ? m.label : key;
+  const month =
+    state.data.months.find(
+      (item) =>
+        item.key === key
+    );
+
+
+  return month
+    ? month.label
+    : key;
 }
+
 
 
 function stationName(id) {
-  const s = state.data.stations.find((x) => x.id === id);
 
-  return s ? s.name : id;
+  const station =
+    state.data.stations.find(
+      (item) =>
+        item.id === id
+    );
+
+
+  return station
+    ? station.name
+    : id;
 }
 
 
-function showToast(msg) {
-  const t = $("#toast");
 
-  t.textContent = msg;
-  t.classList.add("show");
+function showToast(message) {
 
-  setTimeout(() => t.classList.remove("show"), 1800);
+  const toast =
+    $("#toast");
+
+
+  if (!toast) {
+    return;
+  }
+
+
+  toast.textContent =
+    message;
+
+
+  toast.classList.add(
+    "show"
+  );
+
+
+  setTimeout(
+    () => {
+      toast.classList.remove(
+        "show"
+      );
+    },
+    1800
+  );
 }
+
 
 
 /* =========================================================
-   OVERVIEW / METRICS
+   METRICS
 ========================================================= */
 
+
 function buildMetrics() {
+
   const {
     meta,
     stations,
@@ -106,540 +197,1071 @@ function buildMetrics() {
     latestValidation
   } = state.data;
 
-  const uniqueDays = daysInclusive(
-    meta.coverageStart,
-    meta.latestDataDate
-  );
 
-  const stationDays = months.reduce(
-    (sum, m) =>
-      sum +
-      Object.values(m.coverage).reduce(
-        (a, b) => a + b,
-        0
-      ),
-    0
-  );
+  const uniqueDays =
+    daysInclusive(
+      meta.coverageStart,
+      meta.latestDataDate
+    );
 
-  const maxDifference = Math.max(
-    ...latestValidation.map((v) =>
-      Math.abs(Number(v.difference || 0))
-    )
-  );
 
-  $("#metricStations").textContent = stations.length;
-  $("#metricDays").textContent = uniqueDays;
-  $("#metricStationDays").textContent = stationDays;
-  $("#metricBooks").textContent = workbooks.length;
-  $("#metricDifference").textContent = money(maxDifference);
+  const stationDays =
+    months.reduce(
+      (
+        total,
+        month
+      ) => {
+
+        const monthStationDays =
+          Object.values(
+            month.coverage
+          ).reduce(
+            (
+              sum,
+              value
+            ) =>
+              sum +
+              Number(
+                value || 0
+              ),
+            0
+          );
+
+
+        return (
+          total +
+          monthStationDays
+        );
+      },
+      0
+    );
+
+
+  const differences =
+    latestValidation.map(
+      (item) =>
+        Math.abs(
+          Number(
+            item.difference || 0
+          )
+        )
+    );
+
+
+  const maxDifference =
+    differences.length
+      ? Math.max(
+          ...differences
+        )
+      : 0;
+
+
+  $("#metricStations").textContent =
+    stations.length;
+
+
+  $("#metricDays").textContent =
+    uniqueDays;
+
+
+  $("#metricStationDays").textContent =
+    stationDays;
+
+
+  $("#metricBooks").textContent =
+    workbooks.length;
+
+
+  $("#metricDifference").textContent =
+    money(
+      maxDifference
+    );
+
 
   $("#metricDaysSub").textContent =
-    `${dateOnlyLabel(meta.coverageStart)} – ${dateOnlyLabel(meta.latestDataDate)}`;
+    `${dateOnlyLabel(
+      meta.coverageStart
+    )} – ${dateOnlyLabel(
+      meta.latestDataDate
+    )}`;
+
 
   $("#latestDataDate").textContent =
-    dateOnlyLabel(meta.latestDataDate);
+    dateOnlyLabel(
+      meta.latestDataDate
+    );
+
 
   $("#latestFileUpdate").textContent =
-    dateLabel(meta.latestFileModifiedAt, true);
+    dateLabel(
+      meta.latestFileModifiedAt,
+      true
+    );
+
 
   $("#sourceFolderTop").href =
     meta.sourceFolderUrl;
 
+
   $("#snapshotAt").textContent =
-    dateLabel(meta.dashboardSnapshotAt, true);
+    dateLabel(
+      meta.dashboardSnapshotAt,
+      true
+    );
+
 
   $("#evidenceBasis").textContent =
     meta.evidenceBasis;
+
 
   const latestValidationDate =
     latestValidation.length
       ? latestValidation[0].date
       : meta.latestDataDate;
 
+
   $("#validationSubtitle").textContent =
-    `Latest Cost of Sales output · ${dateOnlyLabel(latestValidationDate)}`;
+    `Latest Cost of Sales output · ${dateOnlyLabel(
+      latestValidationDate
+    )}`;
+
 
   $("#latestValidationDate").textContent =
-    dateOnlyLabel(latestValidationDate);
+    dateOnlyLabel(
+      latestValidationDate
+    );
 }
 
 
+
 /* =========================================================
-   CHART 1 — CUMULATIVE COVERAGE
+   CHART 1
+   MONTHLY VERIFIED STATION-DAY RECORDS
+
+   July      31 + 31 = 62
+   August    31 + 31 = 62
+   September 7 + 7   = 14
+
+   Total = 138
 ========================================================= */
 
+
 function buildCoverageTrendChart() {
-  const target = $("#coverageTrendChart");
 
-  let cumulative = 0;
+  const target =
+    $("#coverageTrendChart");
 
-  const data = state.data.months.map((month) => {
-    const monthTotal =
-      Object.values(month.coverage)
-        .reduce((sum, value) => sum + Number(value || 0), 0);
 
-    cumulative += monthTotal;
+  if (!target) {
+    return;
+  }
 
-    return {
-      label: month.label.replace(" 2026", ""),
-      value: cumulative,
-      increment: monthTotal
-    };
-  });
+
+  const data =
+    state.data.months.map(
+      (month) => {
+
+        const monthTotal =
+          Object.values(
+            month.coverage
+          ).reduce(
+            (
+              sum,
+              value
+            ) =>
+              sum +
+              Number(
+                value || 0
+              ),
+            0
+          );
+
+
+        return {
+          label:
+            month.label.replace(
+              " 2026",
+              ""
+            ),
+
+          value:
+            monthTotal
+        };
+      }
+    );
+
+
+  const totalVerified =
+    data.reduce(
+      (
+        sum,
+        item
+      ) =>
+        sum +
+        item.value,
+      0
+    );
+
 
   $("#coverageTrendTotal").textContent =
-    cumulative.toLocaleString("en-MY");
+    totalVerified.toLocaleString(
+      "en-MY"
+    );
 
-  const width = 720;
-  const height = 250;
+
+  const width =
+    720;
+
+
+  const height =
+    250;
+
 
   const margin = {
-    top: 25,
+    top: 28,
     right: 30,
     bottom: 45,
     left: 48
   };
 
+
   const plotWidth =
-    width - margin.left - margin.right;
+    width -
+    margin.left -
+    margin.right;
+
 
   const plotHeight =
-    height - margin.top - margin.bottom;
+    height -
+    margin.top -
+    margin.bottom;
+
 
   const maxValue =
-    Math.max(...data.map((d) => d.value), 1);
+    Math.max(
+      ...data.map(
+        (item) =>
+          item.value
+      ),
+      1
+    );
+
 
   const chartMax =
-    Math.ceil(maxValue / 25) * 25;
-
-  const x = (index) =>
-    margin.left +
-    (data.length === 1
-      ? plotWidth / 2
-      : (plotWidth / (data.length - 1)) * index);
-
-  const y = (value) =>
-    margin.top +
-    plotHeight -
-    (value / chartMax) * plotHeight;
+    Math.max(
+      10,
+      Math.ceil(
+        maxValue / 10
+      ) * 10
+    );
 
 
-  const gridCount = 4;
+  const x =
+    (index) => {
 
-  const gridLines = Array.from(
-    { length: gridCount + 1 },
-    (_, i) => {
-      const value =
-        Math.round(
-          (chartMax / gridCount) * i
+      if (
+        data.length === 1
+      ) {
+
+        return (
+          margin.left +
+          plotWidth / 2
         );
-
-      const py = y(value);
-
-      return `
-        <line
-          class="chart-grid-line"
-          x1="${margin.left}"
-          y1="${py}"
-          x2="${width - margin.right}"
-          y2="${py}"
-        />
-
-        <text
-          class="chart-axis-text"
-          x="${margin.left - 10}"
-          y="${py + 4}"
-          text-anchor="end"
-        >
-          ${value}
-        </text>
-      `;
-    }
-  ).join("");
+      }
 
 
-  const points = data.map(
-    (d, i) => `${x(i)},${y(d.value)}`
-  );
+      return (
+        margin.left +
+        (
+          plotWidth /
+          (
+            data.length -
+            1
+          )
+        ) *
+        index
+      );
+    };
+
+
+  const y =
+    (value) =>
+      margin.top +
+      plotHeight -
+      (
+        value /
+        chartMax
+      ) *
+      plotHeight;
+
+
+
+  /* GRID */
+
+
+  const gridCount =
+    4;
+
+
+  const gridLines =
+    Array.from(
+      {
+        length:
+          gridCount + 1
+      },
+      (
+        _,
+        index
+      ) => {
+
+        const value =
+          Math.round(
+            (
+              chartMax /
+              gridCount
+            ) *
+            index
+          );
+
+
+        const py =
+          y(value);
+
+
+        return `
+          <line
+            class="chart-grid-line"
+            x1="${margin.left}"
+            y1="${py}"
+            x2="${width - margin.right}"
+            y2="${py}"
+          />
+
+          <text
+            class="chart-axis-text"
+            x="${margin.left - 10}"
+            y="${py + 4}"
+            text-anchor="end"
+          >
+            ${value}
+          </text>
+        `;
+      }
+    ).join("");
+
+
+
+  /* POINTS */
+
+
+  const points =
+    data.map(
+      (
+        item,
+        index
+      ) =>
+        `${x(index)},${y(
+          item.value
+        )}`
+    );
+
+
+
+  /* AREA */
 
 
   const areaPoints = [
-    `${x(0)},${margin.top + plotHeight}`,
+
+    `${x(0)},${
+      margin.top +
+      plotHeight
+    }`,
+
     ...points,
-    `${x(data.length - 1)},${margin.top + plotHeight}`
+
+    `${
+      x(
+        data.length - 1
+      )
+    },${
+      margin.top +
+      plotHeight
+    }`
+
   ].join(" ");
 
 
-  const labels = data
-    .map(
-      (d, i) => `
+
+  /* X LABELS */
+
+
+  const labels =
+    data.map(
+      (
+        item,
+        index
+      ) => `
+
         <text
           class="chart-month-text"
-          x="${x(i)}"
+          x="${x(index)}"
           y="${height - 14}"
           text-anchor="middle"
         >
-          ${d.label}
+          ${item.label}
         </text>
+
       `
-    )
-    .join("");
+    ).join("");
 
 
-  const markers = data
-    .map(
-      (d, i) => `
+
+  /* DATA LABELS */
+
+
+  const markers =
+    data.map(
+      (
+        item,
+        index
+      ) => `
+
         <circle
           class="chart-point"
-          cx="${x(i)}"
-          cy="${y(d.value)}"
+          cx="${x(index)}"
+          cy="${y(item.value)}"
           r="5"
         />
 
+
         <text
           class="chart-point-value"
-          x="${x(i)}"
-          y="${y(d.value) - 13}"
+          x="${x(index)}"
+          y="${
+            y(item.value) -
+            13
+          }"
           text-anchor="middle"
         >
-          ${d.value}
+          ${item.value}
         </text>
+
       `
-    )
-    .join("");
+    ).join("");
+
 
 
   target.innerHTML = `
+
     <svg
       viewBox="0 0 ${width} ${height}"
       role="img"
-      aria-label="Cumulative verified station-day coverage from July onward"
+      aria-label="Verified station-day records by month"
     >
 
       ${gridLines}
+
 
       <polygon
         class="chart-area"
         points="${areaPoints}"
       />
 
+
       <polyline
         class="chart-line"
-        points="${points.join(" ")}"
+        points="${points.join(
+          " "
+        )}"
       />
 
+
       ${markers}
+
       ${labels}
 
     </svg>
+
   `;
 }
 
 
+
 /* =========================================================
-   CHART 2 — LATEST VALIDATED TOTALS
+   CHART 2
+   LATEST VALIDATED FINANCE TOTALS
 ========================================================= */
 
+
 function buildValidationTotalsChart() {
-  const target = $("#validationTotalsChart");
 
-  const values = state.data.latestValidation.map(
-    (v) => ({
-      station: stationName(v.station),
-      total: Number(v.total || 0)
-    })
-  );
+  const target =
+    $("#validationTotalsChart");
 
-  const width = 600;
-  const height = 250;
 
-  const left = 90;
-  const right = 25;
+  if (!target) {
+    return;
+  }
+
+
+  const values =
+    state.data.latestValidation.map(
+      (item) => ({
+        station:
+          stationName(
+            item.station
+          ),
+
+        total:
+          Number(
+            item.total || 0
+          )
+      })
+    );
+
+
+  const width =
+    600;
+
+
+  const height =
+    250;
+
+
+  const left =
+    90;
+
+
+  const right =
+    25;
+
 
   const barArea =
-    width - left - right;
+    width -
+    left -
+    right;
+
 
   const maxValue =
     Math.max(
-      ...values.map((d) => d.total),
+      ...values.map(
+        (item) =>
+          item.total
+      ),
       1
     );
 
-  const rows = values
-    .map((d, i) => {
-      const y =
-        58 + i * 85;
 
-      const barWidth =
-        (d.total / maxValue) * barArea;
+  const rows =
+    values.map(
+      (
+        item,
+        index
+      ) => {
 
-      return `
-        <text
-          class="chart-bar-label"
-          x="0"
-          y="${y + 18}"
-        >
-          ${d.station}
-        </text>
+        const rowY =
+          58 +
+          index * 85;
 
-        <rect
-          class="chart-bar-bg"
-          x="${left}"
-          y="${y}"
-          width="${barArea}"
-          height="18"
-          rx="3"
-        />
 
-        <rect
-          class="chart-bar"
-          x="${left}"
-          y="${y}"
-          width="${barWidth}"
-          height="18"
-          rx="3"
-        />
+        const barWidth =
+          (
+            item.total /
+            maxValue
+          ) *
+          barArea;
 
-        <text
-          class="chart-bar-value"
-          x="${left}"
-          y="${y - 11}"
-        >
-          ${money(d.total)}
-        </text>
-      `;
-    })
-    .join("");
+
+        return `
+
+          <text
+            class="chart-bar-label"
+            x="0"
+            y="${rowY + 18}"
+          >
+            ${item.station}
+          </text>
+
+
+          <rect
+            class="chart-bar-bg"
+            x="${left}"
+            y="${rowY}"
+            width="${barArea}"
+            height="18"
+            rx="3"
+          />
+
+
+          <rect
+            class="chart-bar"
+            x="${left}"
+            y="${rowY}"
+            width="${barWidth}"
+            height="18"
+            rx="3"
+          />
+
+
+          <text
+            class="chart-bar-value"
+            x="${left}"
+            y="${rowY - 11}"
+          >
+            ${money(
+              item.total
+            )}
+          </text>
+
+        `;
+      }
+    ).join("");
 
 
   target.innerHTML = `
+
     <svg
       viewBox="0 0 ${width} ${height}"
       role="img"
       aria-label="Latest validated Cost of Sales totals by station"
     >
+
       ${rows}
+
     </svg>
+
   `;
 }
 
 
+
 /* =========================================================
-   COVERAGE
+   COVERAGE CALENDAR
 ========================================================= */
 
+
 function buildCoverage() {
-  const wrap = $("#coverageGrid");
 
-  wrap.innerHTML = "";
+  const wrap =
+    $("#coverageGrid");
 
-  state.data.months.forEach((m) => {
 
-    const card = document.createElement("article");
+  if (!wrap) {
+    return;
+  }
 
-    card.className = "month-card";
 
-    const maxCovered =
-      Math.max(...Object.values(m.coverage));
+  wrap.innerHTML =
+    "";
 
-    card.innerHTML = `
-      <div class="month-card-header">
-        <div>
-          <h3>${m.label}</h3>
-          <small>
+
+  state.data.months.forEach(
+    (month) => {
+
+
+      const card =
+        document.createElement(
+          "article"
+        );
+
+
+      card.className =
+        "month-card";
+
+
+      const coverageValues =
+        Object.values(
+          month.coverage
+        ).map(
+          (value) =>
+            Number(
+              value || 0
+            )
+        );
+
+
+      const maxCovered =
+        coverageValues.length
+          ? Math.max(
+              ...coverageValues
+            )
+          : 0;
+
+
+
+      card.innerHTML = `
+
+        <div class="month-card-header">
+
+          <div>
+
+            <h3>
+              ${month.label}
+            </h3>
+
+            <small>
+
+              ${
+                month.status ===
+                "complete"
+
+                  ? "Full month present"
+
+                  : `Records through day ${maxCovered}`
+              }
+
+            </small>
+
+          </div>
+
+
+          <span
+            class="month-status ${month.status}"
+          >
+
             ${
-              m.status === "complete"
-                ? "Full month present"
-                : `Records through day ${maxCovered}`
+              month.status ===
+              "complete"
+
+                ? "Complete"
+
+                : "Current month"
             }
-          </small>
+
+          </span>
+
         </div>
 
-        <span class="month-status ${m.status}">
-          ${
-            m.status === "complete"
-              ? "Complete"
-              : "Current month"
-          }
-        </span>
-      </div>
 
 
-      ${state.data.stations
-        .map((s) => {
-
-          const through =
-            Number(m.coverage[s.id] || 0);
-
-          const cells =
-            Array.from(
-              { length: m.daysInMonth },
-              (_, i) => {
-
-                const day = i + 1;
-
-                const done =
-                  day <= through;
-
-                return `
-                  <span
-                    class="day-cell ${done ? "done" : "future"}"
-                    title="${
-                      m.label
-                    } day ${day}: ${
-                      done
-                        ? "dated record present"
-                        : "record not loaded"
-                    }"
-                  >
-                    ${day}
-                  </span>
-                `;
-              }
-            ).join("");
+        ${state.data.stations
+          .map(
+            (station) => {
 
 
-          return `
-            <div class="station-coverage">
+              const through =
+                Number(
+                  month.coverage[
+                    station.id
+                  ] || 0
+                );
 
-              <div class="station-row-head">
-                <strong>${s.name}</strong>
 
-                <span>
-                  ${through} dated records
-                </span>
-              </div>
+              const cells =
+                Array.from(
+                  {
+                    length:
+                      month.daysInMonth
+                  },
+                  (
+                    _,
+                    index
+                  ) => {
 
-              <div class="day-grid">
-                ${cells}
-              </div>
 
-            </div>
-          `;
-        })
-        .join("")}
-    `;
+                    const day =
+                      index + 1;
 
-    wrap.appendChild(card);
-  });
+
+                    const done =
+                      day <=
+                      through;
+
+
+                    return `
+
+                      <span
+                        class="day-cell ${
+                          done
+                            ? "done"
+                            : "future"
+                        }"
+
+                        title="${
+                          month.label
+                        } day ${day}: ${
+                          done
+                            ? "dated record present"
+                            : "record not loaded"
+                        }"
+                      >
+
+                        ${day}
+
+                      </span>
+
+                    `;
+                  }
+                ).join("");
+
+
+              return `
+
+                <div class="station-coverage">
+
+
+                  <div class="station-row-head">
+
+                    <strong>
+                      ${station.name}
+                    </strong>
+
+
+                    <span>
+                      ${through} dated records
+                    </span>
+
+                  </div>
+
+
+                  <div class="day-grid">
+
+                    ${cells}
+
+                  </div>
+
+
+                </div>
+
+              `;
+            }
+          )
+          .join("")}
+
+      `;
+
+
+      wrap.appendChild(
+        card
+      );
+
+    }
+  );
 }
+
 
 
 /* =========================================================
    VALIDATION
 ========================================================= */
 
+
 function buildValidation() {
-  const wrap = $("#validationGrid");
 
-  wrap.innerHTML = "";
+  const wrap =
+    $("#validationGrid");
 
-  state.data.latestValidation.forEach((v) => {
 
-    const card =
-      document.createElement("article");
+  if (!wrap) {
+    return;
+  }
 
-    card.className =
-      "validation-card";
 
-    card.innerHTML = `
-      <div class="validation-station">
+  wrap.innerHTML =
+    "";
 
-        <div class="station-badge">
-          ${stationName(v.station)}
+
+  state.data.latestValidation.forEach(
+    (validation) => {
+
+
+      const card =
+        document.createElement(
+          "article"
+        );
+
+
+      card.className =
+        "validation-card";
+
+
+      card.innerHTML = `
+
+        <div class="validation-station">
+
+
+          <div class="station-badge">
+
+            ${stationName(
+              validation.station
+            )}
+
+          </div>
+
+
+          <h3>
+
+            ${stationName(
+              validation.station
+            )}
+
+          </h3>
+
+
+          <small>
+
+            ${dateOnlyLabel(
+              validation.date
+            )}
+
+            · Cost of Sales
+
+          </small>
+
+
         </div>
 
-        <h3>
-          ${stationName(v.station)}
-        </h3>
-
-        <small>
-          ${dateOnlyLabel(v.date)}
-          · Cost of Sales
-        </small>
-
-      </div>
 
 
-      <div class="validation-values">
+        <div class="validation-values">
 
-        <div class="value-row">
-          <span>Fuel</span>
-          <strong>${money(v.fuel)}</strong>
+
+          <div class="value-row">
+
+            <span>
+              Fuel
+            </span>
+
+            <strong>
+              ${money(
+                validation.fuel
+              )}
+            </strong>
+
+          </div>
+
+
+
+          <div class="value-row">
+
+            <span>
+              K-Mesra
+            </span>
+
+            <strong>
+              ${money(
+                validation.kMesra
+              )}
+            </strong>
+
+          </div>
+
+
+
+          <div class="value-row total">
+
+            <span>
+              Total
+            </span>
+
+            <strong>
+              ${money(
+                validation.total
+              )}
+            </strong>
+
+          </div>
+
+
+
+          <div class="reconcile-strip">
+
+            <span>
+              Debit / Credit reconciliation
+            </span>
+
+            <strong>
+
+              Diff ${money(
+                validation.difference
+              )}
+
+            </strong>
+
+          </div>
+
+
         </div>
 
-        <div class="value-row">
-          <span>K-Mesra</span>
-          <strong>${money(v.kMesra)}</strong>
-        </div>
+      `;
 
-        <div class="value-row total">
-          <span>Total</span>
-          <strong>${money(v.total)}</strong>
-        </div>
 
-        <div class="reconcile-strip">
-          <span>Debit / Credit reconciliation</span>
+      wrap.appendChild(
+        card
+      );
 
-          <strong>
-            Diff ${money(v.difference)}
-          </strong>
-        </div>
-
-      </div>
-    `;
-
-    wrap.appendChild(card);
-  });
+    }
+  );
 }
+
 
 
 /* =========================================================
    FILTERS
 ========================================================= */
 
+
 function populateFilters() {
+
   const monthOptions =
     state.data.months
       .map(
-        (m) =>
-          `<option value="${m.key}">
-            ${m.label}
-          </option>`
+        (month) =>
+          `
+            <option value="${month.key}">
+              ${month.label}
+            </option>
+          `
       )
       .join("");
 
-  $("#monthFilter").insertAdjacentHTML(
-    "beforeend",
-    monthOptions
-  );
 
-  $("#auditMonthFilter").insertAdjacentHTML(
-    "beforeend",
-    monthOptions
-  );
+  $("#monthFilter")
+    .insertAdjacentHTML(
+      "beforeend",
+      monthOptions
+    );
 
-  $("#stationFilter").insertAdjacentHTML(
-    "beforeend",
+
+  $("#auditMonthFilter")
+    .insertAdjacentHTML(
+      "beforeend",
+      monthOptions
+    );
+
+
+  const stationOptions =
     state.data.stations
       .map(
-        (s) =>
-          `<option value="${s.id}">
-            ${s.name}
-          </option>`
+        (station) =>
+          `
+            <option value="${station.id}">
+              ${station.name}
+            </option>
+          `
       )
-      .join("")
-  );
+      .join("");
+
+
+  $("#stationFilter")
+    .insertAdjacentHTML(
+      "beforeend",
+      stationOptions
+    );
 }
+
 
 
 /* =========================================================
    OUTPUT ARCHIVE
 ========================================================= */
 
+
 function renderArchive() {
+
   const month =
     $("#monthFilter").value;
+
 
   const station =
     $("#stationFilter").value;
@@ -647,148 +1269,263 @@ function renderArchive() {
 
   const rows =
     state.data.workbooks
-
       .filter(
-        (w) =>
-          (month === "all" ||
-            w.month === month) &&
-          (station === "all" ||
-            w.station === station)
-      )
+        (workbook) => {
 
+          const monthMatch =
+            month === "all" ||
+            workbook.month === month;
+
+
+          const stationMatch =
+            station === "all" ||
+            workbook.station ===
+              station;
+
+
+          return (
+            monthMatch &&
+            stationMatch
+          );
+        }
+      )
       .sort(
-        (a, b) =>
-          b.month.localeCompare(a.month) ||
-          a.station.localeCompare(b.station) ||
-          a.type.localeCompare(b.type)
+        (
+          first,
+          second
+        ) =>
+
+          second.month.localeCompare(
+            first.month
+          ) ||
+
+          first.station.localeCompare(
+            second.station
+          ) ||
+
+          first.type.localeCompare(
+            second.type
+          )
       );
 
 
   $("#archiveBody").innerHTML =
-    rows
-      .map(
-        (w) => `
-          <tr>
+    rows.map(
+      (workbook) => `
 
-            <td>
-              <strong>
-                ${monthLabel(w.month)}
-              </strong>
-            </td>
+        <tr>
 
-            <td>
-              ${stationName(w.station)}
-            </td>
 
-            <td>
-              ${w.type}
-            </td>
+          <td>
 
-            <td>
-              <a
-                class="file-link"
-                href="${w.url}"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <span class="file-icon">▤</span>
+            <strong>
+              ${monthLabel(
+                workbook.month
+              )}
+            </strong>
 
-                <span>
-                  ${w.title}
-                </span>
+          </td>
 
-                <span class="external">↗</span>
-              </a>
-            </td>
 
-            <td>
-              ${dateLabel(w.modifiedAt, true)}
-            </td>
+          <td>
 
-            <td>
-              <span class="status-chip">
-                Available
+            ${stationName(
+              workbook.station
+            )}
+
+          </td>
+
+
+          <td>
+
+            ${workbook.type}
+
+          </td>
+
+
+          <td>
+
+            <a
+              class="file-link"
+              href="${workbook.url}"
+              target="_blank"
+              rel="noreferrer"
+            >
+
+              <span class="file-icon">
+                ▤
               </span>
-            </td>
 
-          </tr>
-        `
-      )
-      .join("");
+
+              <span>
+                ${workbook.title}
+              </span>
+
+
+              <span class="external">
+                ↗
+              </span>
+
+            </a>
+
+          </td>
+
+
+          <td>
+
+            ${dateLabel(
+              workbook.modifiedAt,
+              true
+            )}
+
+          </td>
+
+
+          <td>
+
+            <span class="status-chip">
+              Available
+            </span>
+
+          </td>
+
+
+        </tr>
+
+      `
+    ).join("");
 }
+
 
 
 /* =========================================================
    AUDIT DATA
 ========================================================= */
 
+
 function getAuditRows() {
-  const rows = [];
 
-  state.data.months.forEach((m) => {
-
-    state.data.stations.forEach((s) => {
-
-      const through =
-        Number(m.coverage[s.id] || 0);
-
-      for (
-        let day = 1;
-        day <= through;
-        day++
-      ) {
-
-        const [year, month] =
-          m.key.split("-");
-
-        const date =
-          `${year}-${month}-${String(day).padStart(2, "0")}`;
+  const rows =
+    [];
 
 
-        const report =
-          state.data.workbooks.find(
-            (w) =>
-              w.month === m.key &&
-              w.station === s.id &&
-              w.type === "Monthly Retail Report"
-          );
+  state.data.months.forEach(
+    (month) => {
 
 
-        rows.push({
-          date,
-          station: s.id,
-          month: m.key,
-          url:
-            report?.url ||
-            state.data.meta.sourceFolderUrl
-        });
-      }
-    });
-  });
+      state.data.stations.forEach(
+        (station) => {
+
+
+          const through =
+            Number(
+              month.coverage[
+                station.id
+              ] || 0
+            );
+
+
+          for (
+            let day = 1;
+            day <= through;
+            day++
+          ) {
+
+
+            const [
+              year,
+              monthNumber
+            ] =
+              month.key.split(
+                "-"
+              );
+
+
+            const date =
+              `${year}-${monthNumber}-${String(
+                day
+              ).padStart(
+                2,
+                "0"
+              )}`;
+
+
+            const report =
+              state.data.workbooks.find(
+                (workbook) =>
+
+                  workbook.month ===
+                    month.key &&
+
+                  workbook.station ===
+                    station.id &&
+
+                  workbook.type ===
+                    "Monthly Retail Report"
+              );
+
+
+            rows.push({
+
+              date,
+
+              station:
+                station.id,
+
+              month:
+                month.key,
+
+              url:
+                report?.url ||
+                state.data.meta
+                  .sourceFolderUrl
+
+            });
+
+          }
+
+        }
+      );
+
+    }
+  );
 
 
   return rows.sort(
-    (a, b) =>
-      b.date.localeCompare(a.date) ||
-      a.station.localeCompare(b.station)
+    (
+      first,
+      second
+    ) =>
+
+      second.date.localeCompare(
+        first.date
+      ) ||
+
+      first.station.localeCompare(
+        second.station
+      )
   );
 }
+
 
 
 /* =========================================================
    AUDIT TABLE
 ========================================================= */
 
+
 function renderAudit() {
+
   const filter =
     $("#auditMonthFilter").value;
 
 
   const all =
     getAuditRows().filter(
-      (r) =>
+      (row) =>
+
         filter === "all" ||
-        r.month === filter
+        row.month === filter
     );
 
 
@@ -810,65 +1547,97 @@ function renderAudit() {
 
 
   const start =
-    (state.auditPage - 1) *
+    (
+      state.auditPage -
+      1
+    ) *
     state.auditPageSize;
 
 
   const rows =
     all.slice(
       start,
-      start + state.auditPageSize
+      start +
+      state.auditPageSize
     );
 
 
   $("#auditBody").innerHTML =
-    rows
-      .map(
-        (r) => `
-          <tr>
+    rows.map(
+      (row) => `
 
-            <td>
-              <strong>
-                ${dateOnlyLabel(r.date)}
-              </strong>
-            </td>
+        <tr>
 
-            <td>
-              ${stationName(r.station)}
-            </td>
 
-            <td>
-              <a
-                class="file-link"
-                href="${r.url}"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <span class="file-icon">✓</span>
+          <td>
 
-                <span>
-                  Dated record present
-                </span>
+            <strong>
+              ${dateOnlyLabel(
+                row.date
+              )}
+            </strong>
 
-                <span class="external">↗</span>
-              </a>
-            </td>
+          </td>
 
-            <td>
-              Daily station record
-              → Monthly Retail Report
-            </td>
 
-            <td>
-              <span class="status-chip">
-                Verified
+          <td>
+
+            ${stationName(
+              row.station
+            )}
+
+          </td>
+
+
+          <td>
+
+            <a
+              class="file-link"
+              href="${row.url}"
+              target="_blank"
+              rel="noreferrer"
+            >
+
+              <span class="file-icon">
+                ✓
               </span>
-            </td>
 
-          </tr>
-        `
-      )
-      .join("");
+
+              <span>
+                Dated record present
+              </span>
+
+
+              <span class="external">
+                ↗
+              </span>
+
+            </a>
+
+          </td>
+
+
+          <td>
+
+            Daily station record
+            → Monthly Retail Report
+
+          </td>
+
+
+          <td>
+
+            <span class="status-chip">
+              Verified
+            </span>
+
+          </td>
+
+
+        </tr>
+
+      `
+    ).join("");
 
 
   $("#auditCount").textContent =
@@ -888,22 +1657,30 @@ function renderAudit() {
 }
 
 
+
 /* =========================================================
-   CSV
+   CSV EXPORT
 ========================================================= */
 
+
 function downloadAuditCsv() {
+
   const rows =
     getAuditRows();
 
 
   const csv = [
+
     "Date,Station,Evidence,Output Scope,Verification",
 
     ...rows.map(
-      (r) =>
-        `${r.date},${stationName(r.station)},Dated record present,Daily station record to Monthly Retail Report,Verified`
+      (row) =>
+
+        `${row.date},${stationName(
+          row.station
+        )},Dated record present,Daily station record to Monthly Retail Report,Verified`
     )
+
   ].join("\n");
 
 
@@ -918,23 +1695,31 @@ function downloadAuditCsv() {
 
 
   const url =
-    URL.createObjectURL(blob);
+    URL.createObjectURL(
+      blob
+    );
 
 
-  const a =
-    document.createElement("a");
+  const link =
+    document.createElement(
+      "a"
+    );
 
 
-  a.href = url;
+  link.href =
+    url;
 
-  a.download =
+
+  link.download =
     "sentinel-audit-trail.csv";
 
 
-  a.click();
+  link.click();
 
 
-  URL.revokeObjectURL(url);
+  URL.revokeObjectURL(
+    url
+  );
 
 
   showToast(
@@ -943,9 +1728,11 @@ function downloadAuditCsv() {
 }
 
 
+
 /* =========================================================
    EVENTS
 ========================================================= */
+
 
 function bind() {
 
@@ -967,9 +1754,13 @@ function bind() {
     .addEventListener(
       "change",
       () => {
-        state.auditPage = 1;
+
+        state.auditPage =
+          1;
+
 
         renderAudit();
+
       }
     );
 
@@ -978,9 +1769,12 @@ function bind() {
     .addEventListener(
       "click",
       () => {
+
         state.auditPage--;
 
+
         renderAudit();
+
       }
     );
 
@@ -989,9 +1783,12 @@ function bind() {
     .addEventListener(
       "click",
       () => {
+
         state.auditPage++;
 
+
         renderAudit();
+
       }
     );
 
@@ -1004,75 +1801,156 @@ function bind() {
 }
 
 
+
 /* =========================================================
    INIT
 ========================================================= */
 
+
 async function init() {
+
   try {
 
-    const res =
+
+    const response =
       await fetch(
         "data/sentinel-data.json",
         {
-          cache: "no-store"
+          cache:
+            "no-store"
         }
       );
 
 
-    if (!res.ok) {
+    if (
+      !response.ok
+    ) {
+
       throw new Error(
-        "Unable to load evidence data"
+        `Evidence data request failed: HTTP ${response.status}`
       );
+
     }
 
 
     state.data =
-      await res.json();
+      await response.json();
+
 
 
     buildMetrics();
 
+
     buildCoverageTrendChart();
+
 
     buildValidationTotalsChart();
 
+
     buildCoverage();
+
 
     buildValidation();
 
+
     populateFilters();
+
 
     renderArchive();
 
+
     renderAudit();
+
 
     bind();
 
-  } catch (err) {
 
-    console.error(err);
+  } catch (error) {
+
+
+    console.error(
+      "SENTINEL initialization error:",
+      error
+    );
 
 
     document.body.innerHTML = `
+
       <main
         style="
-          font-family:Arial;
-          padding:40px
+          font-family:
+            Poppins,
+            Arial,
+            sans-serif;
+
+          width:
+            min(
+              900px,
+              calc(
+                100% - 40px
+              )
+            );
+
+          margin:
+            70px auto;
+
+          color:
+            #172238;
         "
       >
-        <h1>SENTINEL</h1>
+
+
+        <h1
+          style="
+            color:
+              #112f78;
+
+            margin-bottom:
+              10px;
+          "
+        >
+
+          SENTINEL
+
+        </h1>
+
 
         <p>
-          Unable to load
-          data/sentinel-data.json.
+
+          The control centre
+          could not initialise.
+
         </p>
 
-        <pre>
-          ${err.message}
-        </pre>
+
+        <pre
+          style="
+            margin-top:
+              20px;
+
+            padding:
+              16px;
+
+            background:
+              #f7f9fc;
+
+            border:
+              1px solid
+              #dbe3ef;
+
+            border-radius:
+              8px;
+
+            white-space:
+              pre-wrap;
+          "
+        >${error.message}</pre>
+
+
       </main>
+
     `;
+
   }
 }
 

@@ -3,181 +3,395 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="theme-color" content="#ffffff" />
-  <meta name="description" content="SENTINEL Automation Control Centre — operational evidence of automated station reporting and finance outputs." />
+  <meta name="theme-color" content="#1000ff" />
+  <meta
+    name="description"
+    content="SENTINEL Automation Control Centre — operational evidence of automated retail reporting and finance outputs."
+  />
+
   <title>SENTINEL Automation Control Centre</title>
-  <link rel="icon" type="image/png" sizes="32x32" href="./public/favicon-32.png?v=1" />
-  <link rel="icon" type="image/png" sizes="16x16" href="./public/favicon-16.png?v=1" />
-  <link rel="shortcut icon" href="./public/favicon.ico?v=1" />
-  <link rel="apple-touch-icon" href="./public/apple-touch-icon.png?v=1" />
-  <link rel="icon" type="image/png" sizes="512x512" href="./public/favicon-512.png?v=1" />
+
+  <!-- Same simple blue-square T treatment as Staff Directory -->
+  <link
+    rel="icon"
+    type="image/svg+xml"
+    href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" fill="%231000ff"/><rect x="15" y="14" width="34" height="8" fill="white"/><rect x="28" y="22" width="8" height="28" fill="white"/></svg>'
+  />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
   <link rel="stylesheet" href="styles.css" />
 </head>
+
 <body>
   <div class="page-shell">
+
+    <!-- HEADER -->
     <header class="topbar">
-      <a class="brand" href="#top" aria-label="SENTINEL home">
-        <span class="brand-mark" aria-hidden="true"><img src="./public/t-logo.svg?v=1" alt="" /></span>
+      <a class="brand" href="#overview" aria-label="SENTINEL home">
         <span>
           <strong>SENTINEL</strong>
           <small>Automation Control Centre</small>
         </span>
       </a>
+
       <nav class="nav" aria-label="Page sections">
+        <a href="#overview">Overview</a>
         <a href="#coverage">Coverage</a>
         <a href="#validation">Validation</a>
         <a href="#archive">Outputs</a>
         <a href="#audit">Audit trail</a>
       </nav>
+
       <div class="top-actions">
-        <span class="live-pill"><span class="pulse"></span> LIVE EVIDENCE</span>
-        <button id="presentationBtn" class="btn btn-ghost" type="button">Presentation view</button>
-        <a id="sourceFolderTop" class="btn btn-primary" target="_blank" rel="noreferrer">Open source folder ↗</a>
+        <a
+          id="sourceFolderTop"
+          class="btn btn-primary"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Source folder ↗
+        </a>
       </div>
     </header>
 
-    <main id="top">
-      <section class="hero container">
-        <div class="hero-copy">
-          <div class="eyebrow">DATA AUTOMATION / OPERATIONAL EVIDENCE</div>
-          <h1>SENTINEL Automation<br><span>Control Centre</span></h1>
-          <p id="heroSubtitle">Live operational evidence of automated retail reporting and finance output generation.</p>
-          <div class="hero-meta">
-            <span class="status-dot good"></span>
-            <strong>Evidence current through <span id="latestDataDate">—</span></strong>
-            <span class="meta-sep"></span>
-            <span>Latest file update <strong id="latestFileUpdate">—</strong></span>
-          </div>
+
+    <main>
+
+      <!-- SYSTEM OVERVIEW -->
+      <section id="overview" class="overview container">
+        <div class="overview-copy">
+          <div class="eyebrow">RETAIL AUTOMATION / SYSTEM OVERVIEW</div>
+
+          <h1>Automation Control Centre</h1>
+
+          <p>
+            Operational evidence of recurring station reporting,
+            reconciliation and finance output generation from July 2026 onward.
+          </p>
         </div>
-        <div class="hero-proof">
-          <div class="proof-label">AUTOMATION PROOF CHAIN</div>
-          <div class="flow-row">
-            <div class="flow-node"><span class="flow-icon">01</span><strong>Extract</strong><small>Station data</small></div>
-            <span class="flow-arrow">→</span>
-            <div class="flow-node"><span class="flow-icon">02</span><strong>Validate</strong><small>Completeness</small></div>
-            <span class="flow-arrow">→</span>
-            <div class="flow-node"><span class="flow-icon">03</span><strong>Reconcile</strong><small>Finance logic</small></div>
-            <span class="flow-arrow">→</span>
-            <div class="flow-node"><span class="flow-icon">04</span><strong>Generate</strong><small>Output books</small></div>
+
+        <div class="system-panel">
+          <div class="system-row">
+            <span class="system-label">CONTROL STATUS</span>
+            <strong class="system-status">
+              <span class="status-dot good"></span>
+              Reconciled
+            </strong>
           </div>
-          <div class="flow-caption">RAW STATION DATA → VALIDATED FINANCE-READY OUTPUT → ARCHIVED EVIDENCE</div>
+
+          <div class="system-divider"></div>
+
+          <div class="system-row">
+            <span class="system-label">EVIDENCE THROUGH</span>
+            <strong id="latestDataDate">—</strong>
+          </div>
+
+          <div class="system-row">
+            <span class="system-label">LATEST WORKBOOK UPDATE</span>
+            <strong id="latestFileUpdate">—</strong>
+          </div>
         </div>
       </section>
 
+
+      <!-- METRICS -->
       <section class="container metrics" aria-label="Evidence summary">
-        <article class="metric-card"><span class="metric-kicker">STATIONS</span><strong id="metricStations">—</strong><small>automated station feeds</small></article>
-        <article class="metric-card"><span class="metric-kicker">DAYS COVERED</span><strong id="metricDays">—</strong><small id="metricDaysSub">from July 2026</small></article>
-        <article class="metric-card"><span class="metric-kicker">STATION-DAYS</span><strong id="metricStationDays">—</strong><small>daily records verified</small></article>
-        <article class="metric-card"><span class="metric-kicker">OUTPUT BOOKS</span><strong id="metricBooks">—</strong><small>retail + cost of sales</small></article>
-        <article class="metric-card metric-accent"><span class="metric-kicker">LATEST CONTROL</span><strong>RM0.00</strong><small>reconciliation difference</small></article>
+        <article class="metric-card">
+          <span class="metric-kicker">STATIONS</span>
+          <strong id="metricStations">—</strong>
+          <small>automated station feeds</small>
+        </article>
+
+        <article class="metric-card">
+          <span class="metric-kicker">CALENDAR COVERAGE</span>
+          <strong id="metricDays">—</strong>
+          <small id="metricDaysSub">from July 2026</small>
+        </article>
+
+        <article class="metric-card">
+          <span class="metric-kicker">VERIFIED STATION-DAYS</span>
+          <strong id="metricStationDays">—</strong>
+          <small>dated records present</small>
+        </article>
+
+        <article class="metric-card">
+          <span class="metric-kicker">OUTPUT WORKBOOKS</span>
+          <strong id="metricBooks">—</strong>
+          <small>retail + cost of sales</small>
+        </article>
+
+        <article class="metric-card">
+          <span class="metric-kicker">LATEST DIFFERENCE</span>
+          <strong id="metricDifference">—</strong>
+          <small>debit / credit reconciliation</small>
+        </article>
       </section>
 
-      <section id="coverage" class="section container">
+
+      <!-- CHARTS -->
+      <section class="section container">
         <div class="section-head">
           <div>
-            <div class="eyebrow">01 / DAILY COVERAGE</div>
-            <h2>Evidence of continuous daily processing</h2>
-            <p>Each blue cell represents a dated station record present inside the automated monthly report workbook.</p>
-          </div>
-          <div class="legend">
-            <span><i class="legend-cell verified"></i> Verified</span>
-            <span><i class="legend-cell pending"></i> Not yet due</span>
+            <div class="eyebrow">OPERATIONAL OVERVIEW</div>
+            <h2>Processing history</h2>
+            <p>
+              Evidence coverage and latest validated finance output based on
+              the current SENTINEL records.
+            </p>
           </div>
         </div>
-        <div id="coverageGrid" class="coverage-grid"></div>
+
+        <div class="charts-grid">
+
+          <article class="chart-panel">
+            <div class="chart-head">
+              <div>
+                <span class="chart-label">COVERAGE HISTORY</span>
+                <h3>Verified station-day coverage</h3>
+              </div>
+
+              <div class="chart-total">
+                <strong id="coverageTrendTotal">—</strong>
+                <span>cumulative records</span>
+              </div>
+            </div>
+
+            <div
+              id="coverageTrendChart"
+              class="chart-canvas"
+              aria-label="Verified station-day coverage chart"
+            ></div>
+
+            <div class="chart-foot">
+              Cumulative dated records detected across PSS 1 and PSS 2.
+            </div>
+          </article>
+
+
+          <article class="chart-panel">
+            <div class="chart-head">
+              <div>
+                <span class="chart-label">LATEST VALIDATED OUTPUT</span>
+                <h3>Finance total by station</h3>
+              </div>
+
+              <div class="chart-total">
+                <strong id="latestValidationDate">—</strong>
+                <span>Cost of Sales</span>
+              </div>
+            </div>
+
+            <div
+              id="validationTotalsChart"
+              class="chart-canvas"
+              aria-label="Latest validated finance totals chart"
+            ></div>
+
+            <div class="chart-foot">
+              Latest reconciled Cost of Sales output currently recorded.
+            </div>
+          </article>
+
+        </div>
       </section>
 
-      <section id="validation" class="section section-tint">
+
+      <!-- COVERAGE -->
+      <section id="coverage" class="section section-tint">
         <div class="container">
+
           <div class="section-head">
             <div>
-              <div class="eyebrow">02 / LATEST VALIDATION</div>
-              <h2>Finance output closes with zero difference</h2>
-              <p>Latest Cost of Sales evidence from 07 September 2026.</p>
+              <div class="eyebrow">DAILY PROCESSING</div>
+              <h2>Processing coverage</h2>
+              <p>
+                Each highlighted cell represents a dated station record present
+                in the corresponding monthly output.
+              </p>
             </div>
-            <span class="control-badge">✓ RECONCILED</span>
+
+            <div class="legend">
+              <span>
+                <i class="legend-cell verified"></i>
+                Record present
+              </span>
+
+              <span>
+                <i class="legend-cell pending"></i>
+                Not yet recorded
+              </span>
+            </div>
           </div>
-          <div id="validationGrid" class="validation-grid"></div>
+
+          <div id="coverageGrid" class="coverage-grid"></div>
+
         </div>
       </section>
 
-      <section id="archive" class="section container">
-        <div class="section-head archive-head">
-          <div>
-            <div class="eyebrow">03 / OUTPUT ARCHIVE</div>
-            <h2>Traceable outputs from July onward</h2>
-            <p>Open the actual Google Drive workbooks directly from the control centre.</p>
-          </div>
-          <div class="filters" aria-label="Output filters">
-            <select id="monthFilter" aria-label="Filter by month"><option value="all">All months</option></select>
-            <select id="stationFilter" aria-label="Filter by station"><option value="all">All stations</option></select>
-          </div>
-        </div>
-        <div class="table-wrap">
-          <table class="output-table">
-            <thead>
-              <tr><th>Period</th><th>Station</th><th>Output</th><th>Google Drive file</th><th>Last updated</th><th>Status</th></tr>
-            </thead>
-            <tbody id="archiveBody"></tbody>
-          </table>
-        </div>
-      </section>
 
-      <section id="audit" class="section container">
+      <!-- VALIDATION -->
+      <section id="validation" class="section container">
+
         <div class="section-head">
           <div>
-            <div class="eyebrow">04 / AUDIT TRAIL</div>
-            <h2>Daily evidence log</h2>
-            <p>Generated from the verified date coverage inside each station's monthly output workbook.</p>
+            <div class="eyebrow">FINANCE CONTROL</div>
+            <h2>Reconciliation</h2>
+            <p id="validationSubtitle">
+              Latest validated Cost of Sales output.
+            </p>
           </div>
+
+          <span class="control-badge">✓ RECONCILED</span>
+        </div>
+
+        <div id="validationGrid" class="validation-grid"></div>
+
+      </section>
+
+
+      <!-- OUTPUT ARCHIVE -->
+      <section id="archive" class="section section-tint">
+        <div class="container">
+
+          <div class="section-head archive-head">
+            <div>
+              <div class="eyebrow">GENERATED OUTPUTS</div>
+              <h2>Output archive</h2>
+              <p>
+                Generated retail and Cost of Sales workbooks stored in Google Drive.
+              </p>
+            </div>
+
+            <div class="filters" aria-label="Output filters">
+              <select id="monthFilter" aria-label="Filter by month">
+                <option value="all">All months</option>
+              </select>
+
+              <select id="stationFilter" aria-label="Filter by station">
+                <option value="all">All stations</option>
+              </select>
+            </div>
+          </div>
+
+
+          <div class="table-wrap">
+            <table class="output-table">
+              <thead>
+                <tr>
+                  <th>Period</th>
+                  <th>Station</th>
+                  <th>Output</th>
+                  <th>Google Drive file</th>
+                  <th>Last updated</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+
+              <tbody id="archiveBody"></tbody>
+            </table>
+          </div>
+
+        </div>
+      </section>
+
+
+      <!-- AUDIT -->
+      <section id="audit" class="section container">
+
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">PROCESS HISTORY</div>
+            <h2>Daily evidence log</h2>
+            <p>
+              Dated station records detected inside each automated monthly report.
+            </p>
+          </div>
+
           <div class="audit-actions">
-            <select id="auditMonthFilter" aria-label="Filter audit trail by month"><option value="all">All months</option></select>
-            <button id="downloadCsvBtn" class="btn btn-ghost" type="button">Download CSV</button>
+            <select
+              id="auditMonthFilter"
+              aria-label="Filter audit trail by month"
+            >
+              <option value="all">All months</option>
+            </select>
+
+            <button id="downloadCsvBtn" class="btn btn-ghost" type="button">
+              Download CSV
+            </button>
           </div>
         </div>
+
+
         <div class="table-wrap audit-wrap">
           <table class="output-table audit-table">
-            <thead><tr><th>Date</th><th>Station</th><th>Evidence</th><th>Output scope</th><th>Verification</th></tr></thead>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Station</th>
+                <th>Evidence</th>
+                <th>Output scope</th>
+                <th>Verification</th>
+              </tr>
+            </thead>
+
             <tbody id="auditBody"></tbody>
           </table>
         </div>
+
+
         <div class="pagination">
           <span id="auditCount">—</span>
+
           <div>
             <button id="prevPage" class="page-btn" type="button">←</button>
             <span id="pageLabel">1 / 1</span>
             <button id="nextPage" class="page-btn" type="button">→</button>
           </div>
         </div>
+
       </section>
 
-      <section class="section section-tint">
-        <div class="container evidence-note">
+
+      <!-- EVIDENCE BASIS -->
+      <section class="evidence-bar">
+        <div class="container evidence-bar-inner">
           <div>
-            <div class="eyebrow">EVIDENCE BASIS</div>
-            <h3>What this control centre proves</h3>
+            <span class="system-label">EVIDENCE BASIS</span>
+            <p id="evidenceBasis"></p>
           </div>
-          <div class="evidence-points">
-            <div><span>01</span><p><strong>Continuity</strong><br>Daily dated records are present from July onward.</p></div>
-            <div><span>02</span><p><strong>Repeatability</strong><br>The same automated output structure exists for PSS 1 and PSS 2.</p></div>
-            <div><span>03</span><p><strong>Control</strong><br>Latest Cost of Sales outputs reconcile to RM0.00 difference.</p></div>
-            <div><span>04</span><p><strong>Traceability</strong><br>Every output shown links back to the source workbook in Google Drive.</p></div>
+
+          <div>
+            <span class="system-label">SNAPSHOT UPDATED</span>
+            <strong id="snapshotAt">—</strong>
           </div>
-          <p id="evidenceBasis" class="fineprint"></p>
         </div>
       </section>
+
     </main>
 
+
     <footer class="footer container">
-      <div><strong>SENTINEL</strong> <span>Data to value. Automatically.</span></div>
-      <div>Static GitHub Pages evidence console · <span id="snapshotAt">—</span></div>
+      <div>
+        <strong>SENTINEL</strong>
+        <span>Retail automation control centre</span>
+      </div>
+
+      <div>
+        MRANTI Data
+      </div>
     </footer>
+
   </div>
 
+
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
   <script src="app.js" defer></script>
 </body>
 </html>

@@ -1,0 +1,187 @@
+{
+  "meta": {
+    "title": "SENTINEL Automation Control Centre",
+    "subtitle": "Live operational evidence of automated retail reporting and finance output generation",
+    "coverageStart": "2026-07-01",
+    "latestDataDate": "2026-09-08",
+    "dashboardSnapshotAt": "2026-09-09T09:41:00+08:00",
+    "latestFileModifiedAt": "2026-09-09T08:47:13+08:00",
+    "sourceFolderUrl": "https://drive.google.com/drive/folders/1EqSCq_7eVsuLnwnzBTANDWdsnDBF8GxJ",
+    "timezone": "Asia/Kuala_Lumpur",
+    "evidenceBasis": "Daily coverage reflects dated station records present in the automated monthly report workbooks. File timestamps are Google Drive file metadata."
+  },
+  "stations": [
+    {
+      "id": "PSS1",
+      "name": "PSS 1",
+      "fullName": "PETRONAS Service Station 1"
+    },
+    {
+      "id": "PSS2",
+      "name": "PSS 2",
+      "fullName": "PETRONAS Service Station 2"
+    }
+  ],
+  "months": [
+    {
+      "key": "2026-07",
+      "label": "July 2026",
+      "daysInMonth": 31,
+      "status": "complete",
+      "coverage": {
+        "PSS1": 31,
+        "PSS2": 31
+      }
+    },
+    {
+      "key": "2026-08",
+      "label": "August 2026",
+      "daysInMonth": 31,
+      "status": "complete",
+      "coverage": {
+        "PSS1": 31,
+        "PSS2": 31
+      }
+    },
+    {
+      "key": "2026-09",
+      "label": "September 2026",
+      "daysInMonth": 30,
+      "status": "active",
+      "coverage": {
+        "PSS1": 8,
+        "PSS2": 8
+      }
+    }
+  ],
+  "latestValidation": [
+    {
+      "station": "PSS1",
+      "date": "2026-09-08",
+      "fuel": 89488.79,
+      "kMesra": 3630.32,
+      "total": 93119.11,
+      "difference": 0,
+      "status": "validated"
+    },
+    {
+      "station": "PSS2",
+      "date": "2026-09-08",
+      "fuel": 56228.53,
+      "kMesra": 1306.88,
+      "total": 57535.41,
+      "difference": 0,
+      "status": "validated"
+    }
+  ],
+  "workbooks": [
+    {
+      "month": "2026-07",
+      "station": "PSS1",
+      "type": "Monthly Retail Report",
+      "title": "Monthly Report Retail PSS 1 - July 2026",
+      "url": "https://docs.google.com/spreadsheets/d/1hv-LxuT1kGCJYDTGb9-J1p4HPmpKfQq3_CI4DijXrjA/edit?usp=drivesdk",
+      "createdAt": "2026-07-13T22:28:41+08:00",
+      "modifiedAt": "2026-08-03T14:19:28+08:00"
+    },
+    {
+      "month": "2026-07",
+      "station": "PSS1",
+      "type": "Cost of Sales Report",
+      "title": "Monthly Cost of Sales Report Retail PSS 1 - July 2026",
+      "url": "https://docs.google.com/spreadsheets/d/1M83awmUGO49NEpXGN2EFQfh1mfvXoIYRRq9Qy1vmJAU/edit?usp=drivesdk",
+      "createdAt": "2026-07-31T18:32:24+08:00",
+      "modifiedAt": "2026-08-03T12:02:25+08:00"
+    },
+    {
+      "month": "2026-07",
+      "station": "PSS2",
+      "type": "Monthly Retail Report",
+      "title": "Monthly Report Retail PSS 2 - July 2026",
+      "url": "https://docs.google.com/spreadsheets/d/1y50VuswSyT_HYZr9nYWUMT415KcGzYKYgJ1EuBgNAzs/edit?usp=drivesdk",
+      "createdAt": "2026-07-11T16:19:47+08:00",
+      "modifiedAt": "2026-08-03T12:25:59+08:00"
+    },
+    {
+      "month": "2026-07",
+      "station": "PSS2",
+      "type": "Cost of Sales Report",
+      "title": "Monthly Cost of Sales Report Retail PSS 2 - July 2026",
+      "url": "https://docs.google.com/spreadsheets/d/1xYyL3bEPE6Fvn4s2quOcPzmBBjP3kUJs8bYBfomgsDI/edit?usp=drivesdk",
+      "createdAt": "2026-07-31T19:58:23+08:00",
+      "modifiedAt": "2026-08-03T12:06:51+08:00"
+    },
+    {
+      "month": "2026-08",
+      "station": "PSS1",
+      "type": "Monthly Retail Report",
+      "title": "Monthly Report Retail PSS 1 - August 2026",
+      "url": "https://docs.google.com/spreadsheets/d/1_IrEExCIyWh9OhQbfEOygdbYagoPuFDoCx2p6SaTqbQ/edit?usp=drivesdk",
+      "createdAt": "2026-08-02T08:02:42+08:00",
+      "modifiedAt": "2026-09-01T13:06:16+08:00"
+    },
+    {
+      "month": "2026-08",
+      "station": "PSS1",
+      "type": "Cost of Sales Report",
+      "title": "Monthly Cost of Sales Report Retail PSS 1 - August 2026",
+      "url": "https://docs.google.com/spreadsheets/d/1PqaAMPmg-hxx-jSJASoBpS4f_de3AKBfV5HCoAqteLk/edit?usp=drivesdk",
+      "createdAt": "2026-08-04T09:12:12+08:00",
+      "modifiedAt": "2026-09-01T13:06:23+08:00"
+    },
+    {
+      "month": "2026-08",
+      "station": "PSS2",
+      "type": "Monthly Retail Report",
+      "title": "Monthly Report Retail PSS 2 - August 2026",
+      "url": "https://docs.google.com/spreadsheets/d/1GXuX6OWiSq-gS6JheGPiUWMRTwTINN9lEi_YTCUAsNY/edit?usp=drivesdk",
+      "createdAt": "2026-08-02T08:05:14+08:00",
+      "modifiedAt": "2026-09-01T09:40:10+08:00"
+    },
+    {
+      "month": "2026-08",
+      "station": "PSS2",
+      "type": "Cost of Sales Report",
+      "title": "Monthly Cost of Sales Report Retail PSS 2 - August 2026",
+      "url": "https://docs.google.com/spreadsheets/d/1yMI3FUPAdkkCUkOMc9SrrsaM-8NHgqLiAngXSv1UnEY/edit?usp=drivesdk",
+      "createdAt": "2026-08-04T09:33:34+08:00",
+      "modifiedAt": "2026-09-01T09:40:19+08:00"
+    },
+    {
+      "month": "2026-09",
+      "station": "PSS1",
+      "type": "Monthly Retail Report",
+      "title": "Monthly Report Retail PSS 1 - September 2026",
+      "url": "https://docs.google.com/spreadsheets/d/172peNJY93mqw1tGQAIgJ_PEKFHij0TA4jlcC5A-ZOZA/edit?usp=drivesdk",
+      "createdAt": "2026-09-02T08:07:44+08:00",
+      "modifiedAt": "2026-09-09T08:08:14+08:00"
+    },
+    {
+      "month": "2026-09",
+      "station": "PSS1",
+      "type": "Cost of Sales Report",
+      "title": "Monthly Cost of Sales Report Retail PSS 1 - September 2026",
+      "url": "https://docs.google.com/spreadsheets/d/1Y_GKQeMsZ7I4A1UW6-wGfVhHNszYVPERAiD1M42Ma5Q/edit?usp=drivesdk",
+      "createdAt": "2026-09-02T08:32:52+08:00",
+      "modifiedAt": "2026-09-09T08:32:10+08:00"
+    },
+    {
+      "month": "2026-09",
+      "station": "PSS2",
+      "type": "Monthly Retail Report",
+      "title": "Monthly Report Retail PSS 2 - September 2026",
+      "url": "https://docs.google.com/spreadsheets/d/15T3E6PXLtV0lnxbGb9_btauWcNhb5Cg7IVx_WlLv4X0/edit?usp=drivesdk",
+      "createdAt": "2026-09-02T08:15:33+08:00",
+      "modifiedAt": "2026-09-09T08:16:02+08:00"
+    },
+    {
+      "month": "2026-09",
+      "station": "PSS2",
+      "type": "Cost of Sales Report",
+      "title": "Monthly Cost of Sales Report Retail PSS 2 - September 2026",
+      "url": "https://docs.google.com/spreadsheets/d/1MBzdktebdWLzQW63887jkqV00CiSICk1UCpV0D1G_Jw/edit?usp=drivesdk",
+      "createdAt": "2026-09-02T08:42:22+08:00",
+      "modifiedAt": "2026-09-09T08:47:13+08:00"
+    }
+  ]
+}
